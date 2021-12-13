@@ -31,6 +31,65 @@ class universitario(db.Model):
 	def __repr__(self):
 		return f"apellidos : {self.apellidos}, codigo_estudiante: {self.cod_estudiantes}"
 
+#Tabla profesores - muchos a muchos
+class catedratico(db.Model):
+        id = db.Column(db.Integer, primary_key=True)
+        materia_id = relationship(
+        'materia',
+        secondary=association_table,
+        back_populates='materia')
+        primer_nombre = db.Column(db.String(20), unique=False, nullable=False)
+        segundo_nombre = db.Column(db.String(20), unique=False, nullable=False)
+        apellidos = db.Column(db.String(50), unique=False, nullable=False)
+        edad = db.Column(db.Integer, nullable=False)
+        id_facultad = db.Column(db.Integer), unique=False, nullable=False)
+
+        def as_dict(self):
+                return {i.name: getattr(self, i.name) for i in self.__table__.columns}
+
+        def __repr__(self):
+                return f"Catedratico : {self.primer_nombre}, Facultad: {self.id_facultad}"
+
+
+#Tabla facultad - uno a muchos
+class facultad_universitaria(db.Model):
+        id = db.Column(db.Integer, primary_key=True)
+        nombre_facultad = db.Column(db.String(20), unique=False, nullable=False)
+        estudiante = db.Column(db.String(20), unique=False, nullable=False)
+
+        def as_dict(self):
+                return {i.name: getattr(self, i.name) for i in self.__table__.columns}
+
+        def __repr__(self):
+                return f"id : {self.id}, nombre_facultad: {self.nombre_facultad}"
+
+
+#Tabla materia - muchos a muchos
+class materia(db.Model):
+        id = db.Column(db.Integer, primary_key=True)
+        materia = db.Column(db.String(20), unique=False, nullable=False)
+
+        def as_dict(self):
+                return {i.name: getattr(self, i.name) for i in self.__table__.columns}
+
+        def __repr__(self):
+                return f"id : {self.id}, materia: {self.materia}"
+
+
+#Tabla codigo_estudiante - uno a uno
+class codigo_estudiante(db.Model):
+        id = db.Column(db.Integer, primary_key=True)
+        cod_estudiante = db.Column(db.String(20), unique=False, nullable=False)
+        estudiante = db.Column(db.String(20), unique=False, nullable=False)
+        
+        def as_dict(self):
+                return {i.name: getattr(self, i.name) for i in self.__table__.columns}
+
+        def __repr__(self):
+                return f"id : {self.id}, codigo_estudiante: {self.cod_estudiante}"
+
+
+
 
 #------------------------------------------------------------------------------
 #modulo principal INDEX
